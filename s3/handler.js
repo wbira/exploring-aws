@@ -1,15 +1,15 @@
 'use strict';
 
-module.exports.hello = async event => {
+const fileManager = require('./fileManager');
+
+module.exports.appendText = async event => {
+  const text = event.queryStringParameters.text;
+
+  const url = await fileManager.appendText(text);
   return {
     statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event
-      },
-      null,
-      2
-    )
+    body: JSON.stringify({
+      url
+    })
   };
 };
