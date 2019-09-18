@@ -6,21 +6,21 @@ provider:
   region: eu-west-1
   profile: default
 
-iamRoleStatements:
-  - Effect: "Allow"
-    Action:
-      - "s3:ListBucket"
-      - "s3:PutObject"
-      - "s3:GetObject"
-    Resource: "arn:aws:s3:::wb-s3-example-operations/*"
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:ListBucket"
+        - "s3:GetObject"
+        - "s3:PutObject"
+      Resource: "arn:aws:s3:::wb-s3-example-operations/*"
 
 functions:
   appendText:
     handler: handler.appendText
     events:
-      -http:
-        path: appendText
-        method: put
+      - http:
+          path: appendText
+          method: put
 
 resources:
   Resources:

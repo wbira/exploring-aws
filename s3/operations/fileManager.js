@@ -7,7 +7,7 @@ const BUCKET = 'wb-s3-example-operations';
 const OBJECT_KEY = 'file.txt';
 
 module.exports.appendText = async text => {
-  getS3Object(BUCKET, OBJECT_KEY)
+  return getS3Object(BUCKET, OBJECT_KEY)
     .then(data => appendText(data.Body, text))
     .then(appendedText => putS3Object(BUCKET, OBJECT_KEY, appendedText))
     .then(() => getSignedUrl(BUCKET, OBJECT_KEY));
@@ -37,7 +37,7 @@ function putS3Object(bucket, key, body) {
     Body: body,
     ContentType: 'text/plain',
     Key: key
-  });
+  }).promise();
 }
 
 function getSignedUrl(bucket, key) {
