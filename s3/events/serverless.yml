@@ -1,0 +1,35 @@
+service: s3-event-trigger
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  profile: default
+  region: eu-west-1
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - s3:
+        bucket: wb-s3-example-event-handling
+        event: s3:ObjectCreated:*
+        rules:
+          - prefix: uploads/
+          - suffix: .txt
+
+  bye:
+    handler: handler.bye
+    events:
+      - s3:
+        bucket: wb-s3-example-event-handling
+        event: s3:ObjectRemoved:*
+        rules:
+          - prefix: uploads/
+          - suffix: .txt
+
+resources:
+  Resources:
+    NewResource:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: wb-s3-example-event-handling
