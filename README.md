@@ -4,4 +4,6 @@ I've added here some code examples created during preparation to AWS Certified D
 
 Here list of "touched" services
 
-- S3
+### S3 ###
+- Example of basic operations (getObject, PutObject, getSignedUrl)
+- Handling events dispatched from S3 (create, remove)
