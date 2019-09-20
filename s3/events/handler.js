@@ -17,7 +17,7 @@ module.exports.bye = async event => {
 
   console.log('Bucket:', bucket);
   console.log('Object key:', key);
-  console.log(`A new file ${key} was created in the bucket ${bucket}`);
+  console.log(`A new file ${key} was removed in the bucket ${bucket}`);
   console.log('Event: ', event);
   return null;
 };
