@@ -1,0 +1,31 @@
+service: serverless-token-authorizer
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  profile: default
+  region: eu-west-1
+  iamManagedPolicies:
+    - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+  apiKeys:
+    - mySecretAPIKey
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: hello
+          method: get
+          authorizer: authorize
+
+  generateToken:
+    handler: handler.generateToken
+    events:
+      - http:
+          path: register
+          method: post
+          private: true
+
+  authorize:
+    handler: handler.authorize
