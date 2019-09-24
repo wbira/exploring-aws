@@ -1,18 +1,35 @@
 'use strict';
 
+const authorizer = require('./authorizer');
+
 module.exports.hello = async event => {
   return {
     statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
+    body: JSON.stringify({
+      message: 'The token was valid.'
+    })
   };
+};
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
+module.exports.generateToken = async event => {
+  const token = authorizer.generateToken(event.body);
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      token
+    })
+  };
+};
+
+module.exports.authorize = async ({ authorizationToken, methodArn }) => {
+  try {
+    console.log('Token:', authorizationToken);
+    console.log('MethodArn:', methodArn);
+
+    const policy = authorizer.generatePolicy(authorizationToken, methodArn);
+    return policy;
+  } catch (error) {
+    console.error(error.message);
+    return error;
+  }
 };

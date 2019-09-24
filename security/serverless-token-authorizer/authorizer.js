@@ -3,7 +3,7 @@ const SECRET_KEY = 'someSecretKey';
 
 module.exports.generatePolicy = (token, methodArn) => {
   if (this.decodeToken(token) != null) {
-    return createPolicy();
+    return createPolicy('user', 'Allow', methodArn);
   } else {
     console.log('Unauthorized!!!');
     const error = new Error('Unauthorized');
@@ -28,5 +28,26 @@ module.exports.decodeToken = token => {
   }
 };
 
-// todo implement proper policy creator
-function createPolicy() {}
+function createPolicy(principalId, effect, resource) {
+  var authResponse = {};
+
+  authResponse.principalId = principalId;
+  if (effect && resource) {
+    var policyDocument = {};
+    policyDocument.Version = '2012-10-17';
+    policyDocument.Statement = [];
+    var statementOne = {};
+    statementOne.Action = 'execute-api:Invoke';
+    statementOne.Effect = effect;
+    statementOne.Resource = resource;
+    policyDocument.Statement[0] = statementOne;
+    authResponse.policyDocument = policyDocument;
+  }
+
+  authResponse.context = {
+    stringKey: 'stringval',
+    numberKey: 123,
+    booleanKey: true
+  };
+  return authResponse;
+}
