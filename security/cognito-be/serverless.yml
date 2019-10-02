@@ -11,7 +11,12 @@ provider:
 functions:
   hello:
     handler: handler.hello
-
+    events:
+      - http:
+          path: hello
+          method: get
+          cors: true
+          authorizer: aws_iam
 resources:
   Resources:
     CognitoUserPool:
