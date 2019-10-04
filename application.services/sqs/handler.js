@@ -4,7 +4,7 @@ const AWS = require('aws-sdk');
 const sqs = new AWS.SQS({ region: 'eu-west-1' });
 
 const AWS_ACCOUNT = process.env.ACCOUNT_ID;
-const QueueUrl = `https://sqs.eu-west-1.amazonaws.com/${AWS_ACCOUNT}/MyQueue`;
+const QueueUrl = `https://sqs.eu-west-1.amazonaws.com/${AWS_ACCOUNT}/TestQueue`;
 
 module.exports.hello = async event => {
   console.log('Event:', event);
@@ -12,6 +12,7 @@ module.exports.hello = async event => {
     MessageBody: 'Hola',
     QueueUrl
   };
+  let data;
   try {
     data = await sqs.sendMessage(params).promise();
     console.log('Message id:', data.MessageId);
