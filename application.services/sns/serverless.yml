@@ -1,0 +1,40 @@
+service: sns
+
+custom:
+  settings:
+    TOPIC_ARN: !Ref SuperTopic
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: eu-west-1
+  environment: ${self:custom.settings}
+  iamManagedPolicies:
+    - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: "sns:publish"
+      Resource: !Ref SuperTopic
+
+functions:
+  snsPublisher:
+    handler: handler.snsPublisher
+    events:
+      - http:
+          method: get
+          path: hello
+
+  snsTrigger:
+    handler: handler.snsTrigger
+    events:
+      - sns:
+          arn: !Ref SuperTopic
+          topicName: MyCustomTopic
+
+resources:
+  Resources:
+    SuperTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: MyCustomTopic
