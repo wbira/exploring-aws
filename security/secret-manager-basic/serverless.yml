@@ -1,0 +1,36 @@
+service: secret-manager-basic
+
+custom:
+  settings:
+    region: "eu-west-1"
+    secretName: !Ref TestSecret
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: eu-west-1
+  environment: ${self:custom.settings}
+  iamManagedPolicies:
+    - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "secretsmanager:GetSecretValue"
+      Resource: !Ref TestSecret
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          method: get
+          path: hello
+
+resources:
+  Resources:
+    TestSecret:
+      Type: "AWS::SecretsManager::Secret"
+      Properties:
+        Name: "SomeSecret"
+        Description: "It contains some secret value"
+        SecretString: "This is our secret"
