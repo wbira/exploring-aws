@@ -6,6 +6,7 @@
   "author": "Waldemar Bira",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.544.0",
     "uuid": "^3.3.3"
   }
 }

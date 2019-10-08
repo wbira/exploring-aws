@@ -1,18 +1,16 @@
 'use strict';
 
-module.exports.hello = async event => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
+const databaseManager = require('./databaseManager');
+const uuidv1 = require('uuid/v1');
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
-};
+function createResponse(statusCode, body) {
+  return {
+    statusCode,
+    body: JSON.stringify(body)
+  };
+}
+
+module.exports.getItem = async event => {};
+module.exports.saveItem = async event => {};
+module.exports.deleteItem = async event => {};
+module.exports.updateItem = async event => {};
