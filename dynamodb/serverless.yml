@@ -1,0 +1,60 @@
+service: basic-dynamodb-example
+
+custom:
+  settings:
+    TABLE_NAME: "TestTable"
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: eu-west-1
+  iamManagedPolicies:
+    - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:DeleteItem"
+        - "dynamodb:UpdateItem"
+      Resource:
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self.custom.settings.TABLE_NAME}"
+
+functions:
+  getItem:
+    handler: handler.getItem
+    events:
+      - http:
+        method: get
+  saveItem:
+    handler: handler.saveItem
+    events:
+      - http:
+        method: post
+  updateItem:
+    handler: handler.updateItem
+    events:
+      - http:
+        method: put
+  deleteItem:
+    handler: handler.deleteItem
+    events:
+      - http:
+        method: delete
+
+resources:
+  Resources:
+    ImagesTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "itemId"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "itemId"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.settings.${self:custom.myStage}.ITEMS_DYNAMODB_TABLE}

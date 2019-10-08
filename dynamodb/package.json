@@ -1,0 +1,11 @@
+{
+  "name": "dynamodb",
+  "version": "1.0.0",
+  "description": "basci dynamo example",
+  "main": "index.js",
+  "author": "Waldemar Bira",
+  "license": "MIT",
+  "dependencies": {
+    "uuid": "^3.3.3"
+  }
+}
