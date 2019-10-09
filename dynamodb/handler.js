@@ -19,7 +19,7 @@ module.exports.saveItem = async event => {
     return createResponse(200, response);
   } catch (err) {
     console.log('Error during save item: ', err);
-    return createResponse(500, err);
+    return createResponse(400, err);
   }
 };
 
@@ -31,7 +31,7 @@ module.exports.getItem = async event => {
     return createResponse(200, response);
   } catch (err) {
     console.log('Error during get item: ', err);
-    return createResponse(500, err);
+    return createResponse(404, err);
   }
 };
 
@@ -39,18 +39,16 @@ module.exports.deleteItem = async event => {
   const itemId = event.pathParameters.itemId;
 
   try {
-    const response = await databaseRepository.deleteItem(itemId);
-
+    await databaseRepository.deleteItem(itemId);
     return createResponse(200, `Item ${itemId} was deleted`);
   } catch (err) {
     console.log('Error during delete item: ', err);
-    return createResponse(500, err);
+    return createResponse(400, err);
   }
 };
 
 module.exports.updateItem = async event => {
   const itemId = event.pathParameters.itemId;
-
   const body = JSON.parse(event.body);
   const paramName = body.paramName;
   const paramValue = body.paramValue;
@@ -60,6 +58,6 @@ module.exports.updateItem = async event => {
     return createResponse(200, response);
   } catch (err) {
     console.log('err', err);
-    return createResponse(500, err);
+    return createResponse(400, err);
   }
 };
