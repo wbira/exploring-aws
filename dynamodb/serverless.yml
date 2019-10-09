@@ -8,6 +8,7 @@ provider:
   name: aws
   runtime: nodejs10.x
   region: eu-west-1
+  environment: ${self:custom.settings}
   iamManagedPolicies:
     - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 
@@ -19,29 +20,33 @@ provider:
         - "dynamodb:DeleteItem"
         - "dynamodb:UpdateItem"
       Resource:
-        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self.custom.settings.TABLE_NAME}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.TABLE_NAME}"
 
 functions:
   getItem:
     handler: handler.getItem
     events:
       - http:
-        method: get
+          path: item/{itemId}
+          method: get
   saveItem:
     handler: handler.saveItem
     events:
       - http:
-        method: post
+          path: item
+          method: post
   updateItem:
     handler: handler.updateItem
     events:
       - http:
-        method: put
+          path: item/{itemId}
+          method: put
   deleteItem:
     handler: handler.deleteItem
     events:
       - http:
-        method: delete
+          path: item/{itemId}
+          method: delete
 
 resources:
   Resources:
@@ -57,4 +62,4 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.settings.${self:custom.myStage}.ITEMS_DYNAMODB_TABLE}
+        TableName: ${self:custom.settings.TABLE_NAME}
