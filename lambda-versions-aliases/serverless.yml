@@ -1,0 +1,13 @@
+service: lambda-versions-aliasases
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: eu-west-1
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          method: get
+          path: hello
